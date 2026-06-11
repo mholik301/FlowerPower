@@ -1,0 +1,31 @@
+const {
+    Pool
+} = require('pg');
+
+const pool = new Pool({
+    user: 'ENV:USER',
+    host: 'localhost',
+    database: 'wim-lab3',
+    password: 'ENV:PASS',
+    port: 5432,
+});
+
+module.exports = {
+    query: (text, params) => {
+        const start = Date.now();
+        return pool.query(text, params)
+            .then(res => {
+                const duration = Date.now() - start;
+                /*
+                console.log('executed query', {
+                    text,
+                    params,
+                    duration,
+                    rows: res.rows.length,
+                    firstRow: res.rows[0]
+                });
+                */
+                return res;
+            });
+    }
+}

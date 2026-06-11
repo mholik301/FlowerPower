@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="action_settings">Postavke</string>
+    <string name="app_by">"Aplikaciju izradio: "</string>
+    <string name="add_to_cart_toast">Proizvod dodan u košaricu</string>
+    <string name="main_cat">Kategorije proizvoda</string>
+    <string name="main_price_btn">Cjenik</string>
+</resources>

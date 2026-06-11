@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title><%= title %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" type="image/png" href="../images/flower-icon.png" />
+    <link rel="stylesheet" type="text/css" href="../vendor/normalize.css">
+    <link rel="stylesheet" type="text/css" href="../styles/main.css">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+</head>
+
+<body class="content">
+
+    <%- include(`partials/header`); %>
+
+    <main class="main">
+        <div class="centered-container">
+            <h1 class="decorated-title font-secondary main-color">Add <span class="main-color-emphasized">
+                    New</span> Category</h1>
+            <div class="separator"></div>
+        </div>
+        <section class="section secondary-color-bg">
+            <div class="container">
+
+                <form action="/management/addcategory" method="POST">
+                    <fieldset class="fieldset">
+
+                        <div class="form-div">
+                            <label for="" name"">Name:</label>
+                            <input type="text" name="name" id="name" size="30">
+                        </div>
+
+                        <div class="form-div">
+                            <label for="" description"">Description:</label>
+                            <input type="text" name="description" id="description" size="30">
+                        </div>
+
+                        <div class="form-div">
+                            <label for="" description"">Seasonal:</label>
+                            <input type="radio" id="yes" name="seasonal" value="yes">
+                            Yes
+                            <input type="radio" id="no" name="seasonal" value="no">
+                            No
+                        </div>
+
+                        <hr>
+
+                        <div class="submitButtons">
+                            <input class="btn" type="submit" value="Submit">
+                            <input class="btn" type="reset" value="Reset">
+                        </div>
+
+                    </fieldset>
+                </form>
+
+            </div>
+        </section>
+    </main>
+
+    <%- include(`partials/footer`); %>
+
+</body>
+
+</html>

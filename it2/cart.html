@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Flower power!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" type="image/png" href="images/flower-icon.png" />
+    <link rel="stylesheet" type="text/css" href="vendor/normalize.css">
+    <link rel="stylesheet" type="text/css" href="styles/main.css">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+</head>
+
+
+<body class="content body-header-fixed">
+
+    <header class="header header-fixed primary-color-bg">
+        <nav class="navigation container">
+            <div class="menu">
+                <a href="index.html" class="link menu-item">Home</a>
+                <a href="order.html" class="link menu-item">Order</a>
+                <a href="index.html" class="link">
+                    <img class="scaled-image scaled-image-fixed" src="images/logo.svg" alt="Company logo">
+                </a>
+                <a href="#" class="link menu-item">Contact us</a>
+                <a href="#" class="link menu-item cart-menu">
+                    <img src="images/cart-icon.svg" alt="Cart icon">
+                    <div class="cart-menu-status">
+                        <div id="cart-items">0</div>
+                        <div>items</div>
+                    </div>
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main">
+	
+        <div class="centered-container">
+            <h1 class="decorated-title font-secondary main-color"><span class="main-color-emphasized">
+                    Shopping cart</span> items</h1>
+            <div class="separator"></div>
+        </div>
+		
+		<!--lab 2 zad 2 begin-->
+		<div class="filter-container">
+            <div class="cart-item-title">Filter by product name:</div>
+			<div class="left-container">
+				<div class="filter-item">
+					<input type="text" class="filter-input">
+					<button class="filter-button" type="button" onClick="filterApply()">Apply</button>
+					<button class="filter-button" type="button" onClick="filterClear()">Clear</button>
+				</div>
+			</div>
+        </div>
+		
+		<div class="centered-container">
+            <div class="separator"></div>
+        </div>
+		<!--lab 2 zad 2 end-->
+		
+		<!--lab 2 begin-->
+		<!--krivo3: fali ovaj container i .cart-container u main.css-->
+        <div class="cart-container">
+
+        </div>
+		<!--lab 2 end-->
+
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="menu menu-distributed">
+                <div class="infobox infobox-marginless infobox-copyright">
+                    <h4 class="infobox-title infobox-title-secondary-color main-color-emphasized">
+                        Copy this as much as you like
+                    </h4>
+                </div>
+                <div class="infobox infobox-marginless infobox-flower">
+                    <h4 class="infobox-title infobox-title-secondary-color main-color-emphasized">
+                        Flower power
+                    </h4>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <template id="cart-template-header">
+        <div class=" cart-header ">
+            <div class=" cart-header-title "> Product </div>
+            <div class=" cart-header-title "> Price </div>
+            <div class=" cart-header-title "> Quantity </div>
+        </div>
+    </template>
+
+    <template id="cart-template-item">
+        <div class=" cart-item ">
+            <div class=" cart-item-title "> Tulips </div>
+            <div class=" cart-item-price ">15 kn </div>
+            <input type=" number " class=" cart-item-quantity "> </input>
+        </div>
+    </template>
+    </template>
+    
+	<script>
+	
+        /*part 2 begin*/
+        let makeCart = function () {
+            let counter = document.querySelector("#cart-items");
+            counter.textContent = localStorage.getItem('cartStatus');
+        }
+        /*part 2 end*/
+		
+		/*lab 2 begin*/
+		function fillCart() {
+			cartJSON = localStorage.getItem('itemMap');
+			cart = new Map(JSON.parse(cartJSON));
+
+			let main = document.querySelector('main');
+			let cartContainer = document.querySelector('.cart-container');
+
+			let cartHeaderTemplate = document.querySelector('#cart-template-header');
+			let cartHeader = cartHeaderTemplate.content.cloneNode(true);
+			cartContainer.appendChild(cartHeader);
+
+			
+			async function addItemToCart(itemInMap) {
+				let itemKey = itemInMap[0]
+				
+				let itemInCartJSON = await fetch(
+					"https://wimlab2.azurewebsites.net/products/" +
+					itemKey);
+
+				let itemInCart = await itemInCartJSON.json();
+
+				let cartItemTemplate = document.querySelector('#cart-template-item');
+				let item = cartItemTemplate.content.cloneNode(true);
+
+				let itemTitleElement = item.querySelector('.cart-item-title');
+				itemTitleElement.textContent = itemInCart.name;
+
+				let itemPriceElement = item.querySelector('.cart-item-price');
+				itemPriceElement.textContent = itemInCart.price + " kn";
+
+				let itemQuatn = item.querySelector('.cart-item-quantity');
+				itemQuatn.setAttribute("value", cart.get(itemInMap[0]));
+
+				cartContainer.appendChild(item);
+			};
+			
+			
+			//add products cart iterator
+			for (let keyValue of cart) {
+				addItemToCart(keyValue);
+			}
+			
+			/* krivo1: ovo iterira po values, a ne po [key, value] listama
+			cart.forEach(itemInMap => {
+				setTimeout(() => {addItemToCart(itemInMap);}, 1000)
+			});
+			*/
+		}
+		/*lab 2 end*/
+		
+		//To hide an element, set the style display property to “none”
+		/*lab 2 zad 2 begin*/	
+		function filterApply(){
+			box = document.querySelector(".filter-input");
+			upit = box.value;
+			upitLower = upit.toLowerCase();
+			filterClear();
+			box.value = upit;
+			
+			var items = document.querySelectorAll(".cart-item");
+			for (var item of items) {
+				title = item.querySelector(".cart-item-title").textContent;
+				titleLower = title.toLowerCase();
+			  if (!titleLower.includes(upitLower)) item.style.display = "none";
+			}
+		}
+		
+		function filterClear(){
+			box = document.querySelector(".filter-input");
+			box.value = "";
+			var items = document.querySelectorAll(".cart-item");
+			for (var item of items) {
+			  item.style.display = "flex";
+			}
+		}
+		/*lab 2 zad 2 end*/
+		
+		makeCart(); //part 2 call
+        fillCart() //lab 2 call
+        
+    </script>
+	
+</body>
+
+</html>
